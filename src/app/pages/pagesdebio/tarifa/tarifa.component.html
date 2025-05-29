@@ -1,0 +1,123 @@
+<div class="content">
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-chart">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-category">Gestión de Tarifas</h5>
+            <h2 class="card-title">Tarifas</h2>
+          </div>
+          <button class="btn btn-primary" (click)="openModal(false)">Crear Tarifa</button>
+        </div>
+
+        <div class="card-body">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Monto</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tarifa of tarifas">
+                <td>{{ tarifa.tarifaID }}</td>
+                <td>{{ tarifa.nombre }}</td>
+                <td>{{ tarifa.descripcion || '—' }}</td>
+                <td>{{ tarifa.monto | currency:'USD':'symbol' }}</td>
+                <td>
+                  <button class="btn btn-warning btn-sm" (click)="openModal(true, tarifa)">Editar</button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteTarifa(tarifa.tarifaID)">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal-overlay" *ngIf="showModal">
+          <div class="modal-container">
+            <h3>{{ isEditing ? 'Editar Tarifa' : 'Crear Tarifa' }}</h3>
+            <form (ngSubmit)="saveTarifa()">
+              <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.nombre"
+                  name="nombre"
+                  required
+                  class="form-control"
+                  id="nombre"
+                />
+              </div>
+              <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.descripcion"
+                  name="descripcion"
+                  class="form-control"
+                  id="descripcion"
+                />
+              </div>
+              <div class="form-group">
+                <label for="monto">Monto</label>
+                <input
+                  type="number"
+                  [(ngModel)]="formData.monto"
+                  name="monto"
+                  required
+                  min="0.01"
+                  step="0.01"
+                  class="form-control"
+                  id="monto"
+                />
+              </div>
+              <div class="modal-actions">
+                <button type="submit" class="btn btn-success">
+                  {{ isEditing ? 'Actualizar' : 'Crear' }}
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Fin Modal -->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modal-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+  }
+
+  .modal-actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>

@@ -1,0 +1,118 @@
+<div class="content">
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-chart">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-category">Gestión de Libros</h5>
+            <h2 class="card-title">Libros</h2>
+          </div>
+          <button class="btn btn-primary" (click)="openModal(false)">Crear Libro</button>
+        </div>
+
+        <div class="card-body">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>ISBN</th>
+      
+                <th>Categoría</th>
+                <th>Autor</th>
+                <th>Editorial</th>
+                <th>Disponible</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let libro of libros">
+                <td>{{ libro.titulo }}</td>
+                <td>{{ libro.isbn }}</td>
+          
+                <td>{{ libro.categoriaID }}</td>
+                <td>{{ libro.autorID }}</td>
+                <td>{{ libro.editorialID }}</td>
+                <td>{{ libro.disponible ? 'Sí' : 'No' }}</td>
+                <td>
+                  <button class="btn btn-warning btn-sm" (click)="openModal(true, libro)">Editar</button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteLibro(libro.libroID)">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal-overlay" *ngIf="showModal">
+          <div class="modal-container">
+            <h3>{{ isEditing ? 'Editar Libro' : 'Crear Libro' }}</h3>
+            <form (ngSubmit)="saveLibro()">
+              <div class="form-group">
+                <label for="titulo">Título</label>
+                <input [(ngModel)]="formData.titulo" name="titulo" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="isbn">ISBN</label>
+                <input [(ngModel)]="formData.isbn" name="isbn" required class="form-control" />
+              </div>
+            
+              <div class="form-group">
+                <label for="categoriaID">Categoría ID</label>
+                <input type="number" [(ngModel)]="formData.categoriaID" name="categoriaID" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="autorID">Autor ID</label>
+                <input type="number" [(ngModel)]="formData.autorID" name="autorID" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="editorialID">Editorial ID</label>
+                <input type="number" [(ngModel)]="formData.editorialID" name="editorialID" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label>
+                  <input type="checkbox" [(ngModel)]="formData.disponible" name="disponible" />
+                  Disponible
+                </label>
+              </div>
+              <div class="modal-actions">
+                <button type="submit" class="btn btn-success">{{ isEditing ? 'Actualizar' : 'Crear' }}</button>
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Fin Modal -->
+
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+</style>

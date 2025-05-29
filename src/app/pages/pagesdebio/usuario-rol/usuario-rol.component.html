@@ -1,0 +1,89 @@
+<div class="content">
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-chart">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-category">Gestión de Usuarios y Roles</h5>
+            <h2 class="card-title">Usuario - Rol</h2>
+          </div>
+          <button class="btn btn-primary" (click)="openModal(false)">Crear Relación</button>
+        </div>
+
+        <div class="card-body">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Usuario ID</th>
+                <th>Rol ID</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ur of usuarioRoles">
+                <td>{{ ur.usuarioID }}</td>
+                <td>{{ ur.rolID }}</td>
+                <td>
+                  <button class="btn btn-warning btn-sm" (click)="openModal(true, ur)">Editar</button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteUsuarioRol(ur.usuarioID, ur.rolID)">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal-overlay" *ngIf="showModal">
+          <div class="modal-container">
+            <h3>{{ isEditing ? 'Editar Relación' : 'Crear Relación' }}</h3>
+            <form (ngSubmit)="saveUsuarioRol()">
+              <div class="form-group">
+                <label for="usuarioID">Usuario ID</label>
+                <input type="number" [(ngModel)]="formData.usuarioID" name="usuarioID" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="rolID">Rol ID</label>
+                <input type="number" [(ngModel)]="formData.rolID" name="rolID" required class="form-control" />
+              </div>
+              <div class="modal-actions">
+                <button type="submit" class="btn btn-success">{{ isEditing ? 'Actualizar' : 'Crear' }}</button>
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Fin Modal -->
+
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+    .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+</style>

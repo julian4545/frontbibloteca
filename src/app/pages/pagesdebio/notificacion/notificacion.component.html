@@ -1,0 +1,101 @@
+<div class="content">
+  <div class="row">
+    <div class="col-12">
+      <div class="card card-chart">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-category">Gestión de Notificaciones</h5>
+            <h2 class="card-title">Notificaciones</h2>
+          </div>
+          <button class="btn btn-primary" (click)="openModal(false)">Crear Notificación</button>
+        </div>
+
+        <div class="card-body">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Mensaje</th>
+                <th>Fecha Envío</th>
+                <th>Leído</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let notificacion of notificaciones">
+                <td>{{ notificacion.notificacionID }}</td>
+                <td>{{ notificacion.usuarioID }}</td>
+                <td>{{ notificacion.mensaje }}</td>
+                <td>{{ notificacion.fechaEnvio | date:'short' }}</td>
+                <td>{{ notificacion.leido ? 'Sí' : 'No' }}</td>
+                <td>
+                  <button class="btn btn-warning btn-sm" (click)="openModal(true, notificacion)">Editar</button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteNotificacion(notificacion.notificacionID)">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal-overlay" *ngIf="showModal">
+          <div class="modal-container">
+            <h3>{{ isEditing ? 'Editar Notificación' : 'Crear Notificación' }}</h3>
+            <form (ngSubmit)="saveNotificacion()">
+              <div class="form-group">
+                <label for="usuarioID">ID Usuario</label>
+                <input type="number" [(ngModel)]="formData.usuarioID" name="usuarioID" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="mensaje">Mensaje</label>
+                <textarea [(ngModel)]="formData.mensaje" name="mensaje" required class="form-control"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="fechaEnvio">Fecha Envío</label>
+                <input type="datetime-local" [(ngModel)]="formData.fechaEnvio" name="fechaEnvio" required class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="leido">Leído</label>
+                <select [(ngModel)]="formData.leido" name="leido" class="form-control" required>
+                  <option [ngValue]="true">Sí</option>
+                  <option [ngValue]="false">No</option>
+                </select>
+              </div>
+              <div class="modal-actions">
+                <button type="submit" class="btn btn-success">{{ isEditing ? 'Actualizar' : 'Crear' }}</button>
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Fin Modal -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+</style>
